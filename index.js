@@ -57,6 +57,7 @@ fs.readdirSync(model).forEach(function (file) {
      mainpath.signup
     mainpath.logintoken
     mainpath.verify
+    mainpath.signupadmin
 })
 
 
