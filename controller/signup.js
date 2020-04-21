@@ -10,30 +10,35 @@ const event = require('events')
 const eventemiter = new event.EventEmitter();
 // node mailer
 const nodemailer = require("nodemailer");
+const crypto = require('crypto')
+const tok = require('./../model/usersignuptoken')
+const tokens = mongoose.model('token')
 
-eventemiter.on('welcomemail', (email) => {
-    console.log(email)
-    async function main() {
+eventemiter.on('welcomemail', (resolve) => {
+    console.log(resolve)
+    async function main(req, res) {
 
         let testAccount = await nodemailer.createTestAccount();
 
         let transporter = nodemailer.createTransport({
-            host: '',
+            host: 'smtp.gmail.com',
             port: 587,
             secure: false,
             auth: {
-                user: '', //add user password
-                pass: ''
+                user: 'chakladar.sandeep3@gmail.com', //add user password
+                pass: 'examidea123'
             }
         });
 
+
         // send mail with defined transport object
         let info = await transporter.sendMail({
-            from: '"Fred Foo 👻" ', // sender address
-            to: email, // list of receivers
-            subject: "Hello ✔", // Subject line
-            text: "Hello world?", // plain text body
-            html: "<div>Hi,<br> Welcome to Meeting scheduler.</div>" // html body
+            from: '"Fred Foo 👻" chakladar.sandeep3@gmail.com', // sender address
+            to: resolve.email, // list of receivers
+            subject: "Account Verification Token", // Subject line
+            text: `Hello,\n\n'Please verify your account by clicking the link: \nhttp:\/\/' +  + '\/confirmation\/' + token.token + '.\n' `, // plain text
+            html: ""// html body
+            // ${req.headers.host}
         });
         console.log(`mail is sent successfullt to ${email}`)
 
@@ -73,6 +78,7 @@ let usersignup = (req, res) => {
     let userexist = () => {
         return new Promise((resolve, reject) => {
             usermodel.find({ email: req.body.email }).exec((err, result) => {
+
                 if (err) {
                     logger.error('something went wrong', 'signup:userexist()', 10)
                     let response = api.apiresponse(true, 404, 'something went wrong', null)
@@ -100,24 +106,10 @@ let usersignup = (req, res) => {
                 let response = api.apiresponse(false, 200, "password passed the check", null)
                 resolve(response)
             } else {
-                let response = api.apiresponse(true, 500, 'password doesn\'t pass', null)
+                let response = api.apiresponse(true, 500, 'password doesn\'t pass the criteria', null)
                 reject(response)
             }
 
-        })
-    }
-    // mobile number should be of 10 digits
-
-    let mobile = () => {
-        return new Promise((resolve, reject) => {
-            let regex = /^[0-9]{10}/
-            if ((req.body.mobilenumber).match(regex)) {
-                let response = api.apiresponse(false, 200, 'Mobile number is in correct format', null)
-                resolve(response)
-            } else {
-                let response = api.apiresponse(true, 500, 'Mobile number is less then 10 digits', null)
-                reject(response)
-            }
         })
     }
 
@@ -153,6 +145,7 @@ let usersignup = (req, res) => {
                             reject(response)
                         } else {
                             resolve(data)
+                           
                         }
                     })
 
@@ -164,12 +157,13 @@ let usersignup = (req, res) => {
         })
     }
 
-    emailcheck(req, res).then(userexist).then(passcheck).then(mobile).then(datasave).then((resolve) => {
+    emailcheck(req, res).then(userexist).then(passcheck).then(datasave).then((resolve) => {
         // console.log(resolve)
+
         logger.info('User signup successfully', 'signup()')
         setTimeout(() => {
-            eventemiter.emit('welcomemail', ((resolve.email).toString()))
-        }, 1000)
+            eventemiter.emit('welcomemail', ((resolve).toString()))
+        }, 1000);
         let response = api.apiresponse(false, 200, 'User signup successfully', resolve)
         res.send(response)
     }).catch((err) => {

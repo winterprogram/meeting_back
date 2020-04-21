@@ -25,22 +25,23 @@ let userlogin = (req, res) => {
 
     let mobileDigitCheck = () => {
         return new Promise((resolve, reject) => {
-            if (emptyCheck.emptyCheck(req.body.mobilenumber)) {
+            console.log(req.body.email)
+            if (emptyCheck.emptyCheck(req.body.email)) {
                 logger.error('mobilenumber can\'t be empty','login:mobileDigitCheck()',10)
                 let apis = api.apiresponse(true, 'mobilenumber can\'t be empty', 400, null)
                 reject(apis)
             } else {
-                let regex = /^[0-9]{10}/
-                let mobile = req.body.mobilenumber
+                let regex = /^[a-zA-z]+\W?\w+\W+[a-z]+\W+\w+/
+                let mobile = req.body.email
                 // console.log(mobile)
                 if (mobile.match(regex)) {
-                    logger.info('mobileno passed the check','login:mobileDigitCheck()')
-                    let response = api.apiresponse(false, 200, "mobileno passed the check", null)
+                    logger.info('email passed the check','login:mobileDigitCheck()')
+                    let response = api.apiresponse(false, 200, "email passed the check", null)
                     // console.log(mobile)
                     resolve(response)
                 } else {
-                    logger.error('mobilenumber can\'t be empty','login:mobileDigitCheck()',10)
-                    let response = api.apiresponse(true, 500, 'mobileno doesn\'t pass', null)
+                    logger.error('email can\'t be empty','login:mobileDigitCheck()',10)
+                    let response = api.apiresponse(true, 500, 'email doesn\'t pass', null)
                     reject(response)
                 }
             }
@@ -52,7 +53,7 @@ let userlogin = (req, res) => {
 
     let userLoginFinal = () => {
         return new Promise((resolve, reject) => {
-            usermodel.find({ mobilenumber: req.body.mobilenumber }).exec((err, data) => {
+            usermodel.find({ email: req.body.email }).exec((err, data) => {
                 // console.log(data[0].password)
                 if (err) {
                     logger.error('error at last stage','login:userLoginFinal()',10)
@@ -61,7 +62,7 @@ let userlogin = (req, res) => {
                     reject(apis)
                 } else if (emptyCheck.emptyCheck(data)) {
                     logger.error('mobienumber doesn\'t exist please login','login:userLoginFinal()',10)
-                    let apis = api.apiresponse(true, 'mobienumber doesn\'t exist please login ', 500, null)
+                    let apis = api.apiresponse(true, 'mobienumber doesn\'t exist please signup ', 500, null)
                     // send user to signup 
                     reject(apis)
                 }

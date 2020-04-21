@@ -56,6 +56,7 @@ fs.readdirSync(model).forEach(function (file) {
     let mainpath = require(model + '/' + file)
      mainpath.signup
     mainpath.logintoken
+    mainpath.verify
 })
 
 

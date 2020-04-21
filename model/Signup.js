@@ -13,6 +13,7 @@ let userdata = new Schema({
         required: true,
         type: String
     },
+    // isVerified: { type: Boolean, default: false },
     lastname: {
         default: 'abc',
         required: true,
