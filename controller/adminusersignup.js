@@ -25,15 +25,15 @@ eventemiter.on('welcomemail', (resolve) => {
             port: 587,
             secure: false,
             auth: {
-                user: 'chakladar.sandeep3@gmail.com', //add user password
-                pass: 'examidea123'
+                user: '', //add user password
+                pass: ''
             }
         });
 
 
         // send mail with defined transport object
         let info = await transporter.sendMail({
-            from: '"Fred Foo 👻" chakladar.sandeep3@gmail.com', // sender address
+            from: '"Fred Foo 👻"', // sender address
             to: resolve.email, // list of receivers
             subject: "Account Verification Token", // Subject line
             text: `Hello,\n\n'Please verify your account by clicking the link: \nhttp:\/\/' +  + '\/confirmation\/' + token.token + '.\n' `, // plain text
