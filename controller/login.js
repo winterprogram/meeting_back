@@ -3,9 +3,9 @@ const app = express()
 // to genearte userId
 const randomize = require('randomatic')
 // adding schema
-const model = require('./../model/Signup')
+const model = require('../models/Signup')
 const mongoose = require('mongoose')
-const userslogin = require('./../model/Login')
+const userslogin = require('../models/Login')
 const usermodel = mongoose.model('userinfo')
 const logintoken = mongoose.model('usertoken')
 // adding empty check 

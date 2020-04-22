@@ -1,4 +1,4 @@
-const signupuser = require('./../model/Signup')
+const signupuser = require('../models/Signup')
 const mongoose = require('mongoose')
 const usermodel = mongoose.model('userinfo')
 const api = require('./../lib/apiresponse')
@@ -11,7 +11,7 @@ const eventemiter = new event.EventEmitter();
 // node mailer
 const nodemailer = require("nodemailer");
 const crypto = require('crypto')
-const tok = require('./../model/usersignuptoken')
+const tok = require('../models/usersignuptoken')
 const tokens = mongoose.model('token')
 
 eventemiter.on('welcomemail', (resolve) => {

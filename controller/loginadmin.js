@@ -3,10 +3,10 @@ const app = express()
 // to genearte userId
 const randomize = require('randomatic')
 // adding schema
-const signupuser = require('./../model/Signupad')
+const signupuser = require('../models/Signupad')
 const mongoose = require('mongoose')
 const adminmodel = mongoose.model('admininfo')
-const admint = require('./../model/Loginad')
+const admint = require('../models/Loginad')
 const admintoken = mongoose.model('admintoken')
 // adding empty check 
 const emptyCheck = require('./../lib/emptyCheck')
