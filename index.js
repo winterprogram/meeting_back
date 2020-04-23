@@ -11,6 +11,7 @@ const middlewareOnRoute = require('./middleware/errorOnRoutes')
 const cookieparser = require('cookie-parser')
 const bodyparser = require('body-parser')
 const logger = require('./lib/loger')
+
 var cors = require('cors');
 app.use(cors({ origin: 'http://localhost:4200' }));
 
