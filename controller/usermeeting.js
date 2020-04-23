@@ -120,12 +120,14 @@ let loginFunction = (req, res) => {
                         let apiResponse = response.generate(true, 'No User Details Found', 404, null)
                         reject(apiResponse)
                     } else {
+                        logger.info('user found', 'userController: findUser()')
                         resolve(userDetails)
                     }
                 }));
 
             } else {
-                let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
+                logger.error('email can\'t be blank', 'userController: findUser()', 10)
+                let apiResponse = response.generate(true, 'email can\'t be blank', 400, null)
                 reject(apiResponse)
             }
         })
@@ -135,7 +137,7 @@ let loginFunction = (req, res) => {
         return new Promise((resolve, reject) => {
             passwordLib.comparePassword(req.body.password, resultdata.password, (err, isMatch) => {
                 if (err) {
-                    console.log(err)
+                   logger.error('error while validating password','validatePassword()',10)
                     logger.error(err.message, 'userController: validatePassword()', 10)
                     let apiResponse = response.generate(true, 'Login Failed', 500, null)
                     reject(apiResponse)
@@ -161,7 +163,7 @@ let loginFunction = (req, res) => {
         return new Promise((resolve, reject) => {
             token.generateToken(userDetails, (err, tokenDetails) => {
                 if (err) {
-                    console.log(err)
+                   logger.error('error while generating token','generateToken()',5)
                     let apiResponse = response.generate(true, 'Failed To Generate Token', 500, null)
                     reject(apiResponse)
                 } else {
@@ -179,7 +181,7 @@ let loginFunction = (req, res) => {
                 userId: tokenDetails.userId
             }, (err, retrievedTokenDetails) => {
                 if (err) {
-                    console.log(err.message, 'userController: saveToken', 10)
+                    logger.error(err.message, 'userController: saveToken', 10)
                     let apiResponse = response.generate(true, 'Failed To Generate Token', 500, null)
                     reject(apiResponse)
                 } else if (check.isEmpty(retrievedTokenDetails)) {
@@ -191,7 +193,7 @@ let loginFunction = (req, res) => {
                     })
                     newAuthToken.save((err, newTokenDetails) => {
                         if (err) {
-                            console.log(err)
+                            logger.error('Failed To Generate authToken','newAuthToken()',5)
                             let apiResponse = response.generate(true, 'Failed To Generate Token', 500, null)
                             reject(apiResponse)
                         } else {
@@ -208,7 +210,7 @@ let loginFunction = (req, res) => {
                     retrievedTokenDetails.tokenGenerationTime = time.now()
                     retrievedTokenDetails.save((err, newTokenDetails) => {
                         if (err) {
-                            console.log(err)
+                            logger.error('Failed To Generate authToken -2 ','newAuthToken()',5)
                             let apiResponse = response.generate(true, 'Failed To Generate Token', 500, null)
                             reject(apiResponse)
                         } else {
@@ -246,13 +248,13 @@ let logout = (req, res) => {
         userId: req.params.userId
     }, (err, result) => {
         if (err) {
-            let apiResponse = response.generate(true, `error occurred: ${err.message}`, 401, null)
+            let apiResponse = response.generate(true, `error : ${err.message}`, 401, null)
             res.send(apiResponse)
         } else if (check.isEmpty(result)) {
-            let apiResponse = response.generate(true, 'Already Logged Out or Invalid UserId', 404, null)
+            let apiResponse = response.generate(true, 'Already Logged out', 404, null)
             res.send(apiResponse)
         } else {
-            let apiResponse = response.generate(false, 'Logged Out Successfully', 200, null)
+            let apiResponse = response.generate(false, 'Logged Out done!!', 200, null)
             res.send(apiResponse)
         }
     })
@@ -262,7 +264,7 @@ let forgotPassword = (req, res) => {
     let validateUserInput = () => {
         return new Promise((resolve, reject) => {
             if (check.isEmpty(req.body.email)) {
-                let apiResponse = response.generate(true, 'email is required', 400, null)
+                let apiResponse = response.generate(true, 'email can\'t be empty', 400, null)
                 reject(apiResponse)
             } else {
                 resolve(req)
@@ -281,8 +283,8 @@ let forgotPassword = (req, res) => {
                     let apiResponse = response.generate(true, 'No user found', 404, null)
                     reject(apiResponse)
                 } else {
-                    emailSend.emailSend(result.email, `<a href='http://takgranites.com/resetPassword/${result.userId}'>Click here to reset password</a>`)
-                    let apiResponse = response.generate(false, 'Email sent successfully to reset the password', 200, 'email sent')
+                    emailSend.emailSend(result.email, `<a href='http://localhost:3000/resetPassword/${result.userId}'>Click here to reset password</a>`)
+                    let apiResponse = response.generate(false, 'Email sent to reset password', 200, null)
                     resolve(apiResponse)
                 }
             })
@@ -307,18 +309,18 @@ let resetPassword = (req, res) => {
                     userId: req.body.userId
                 }, (err, userDetails) => {
                     if (err) {
-                        let apiResponse = response.generate(true, 'Failed to find user', 401, null)
+                        let apiResponse = response.generate(true, 'User not found', 404, null)
                         reject(apiResponse)
                     } else if (check.isEmpty(userDetails)) {
                         console.log(userDetails)
-                        let apiResponse = response.generate(true, 'No details found', 404, null)
+                        let apiResponse = response.generate(true, 'User deatils not found', 404, null)
                         reject(apiResponse)
                     } else {
                         resolve(userDetails)
                     }
                 })
             } else {
-                let apiResponse = response.generate(true, 'UserID parameter missing', 400, null)
+                let apiResponse = response.generate(true, 'UserID is missing', 400, null)
                 reject(apiResponse)
             }
         })
@@ -395,7 +397,7 @@ let deleteUser = (req, res) => {
             let apiResponse = response.generate(true, 'No User Found', 404, null)
             res.send(apiResponse)
         } else {
-            let apiResponse = response.generate(false, 'Deleted the user successfully', 200, result)
+            let apiResponse = response.generate(false, 'Deleted the user', 200, result)
             res.send(apiResponse)
         }
     });// end user model find and remove

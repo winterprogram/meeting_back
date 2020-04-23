@@ -75,9 +75,6 @@ let route = './routes'
 fs.readdirSync(route).forEach(function (file) {
     (~file.indexOf('.js'))
     let router = require(route + '/' + file)
-    console.log(router)
-    // router.setRouter(app)
-    // router.route(app)
     router.setRouter(app)
     
 })
