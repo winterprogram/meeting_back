@@ -11,18 +11,26 @@ const middlewareOnRoute = require('./middleware/errorOnRoutes')
 const cookieparser = require('cookie-parser')
 const bodyparser = require('body-parser')
 const logger = require('./lib/loger')
+const routeLoggerMiddleware = require('./middleware/routeLogger')
 
 var cors = require('cors');
-app.use(cors());
+
 app.use(cookieparser())
+app.use(routeLoggerMiddleware.logIp);
 app.use(bodyparser.urlencoded({ extended: false }))
 app.use(bodyparser.json());
-
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    next();
+});
 
 app.use(middlewareOnStart.appOnstart)
 // adding listerner
 const server = http.createServer(app)
 server.listen(appconfigs.port)
+// server.use(restify.CORS());
 // server.listen(process.env.PORT || 3000, function(){
 //     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 //   });
