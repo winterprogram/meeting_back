@@ -13,8 +13,7 @@ const bodyparser = require('body-parser')
 const logger = require('./lib/loger')
 
 var cors = require('cors');
-app.use(cors({ origin: '*' }));
-
+app.use(cors({ origin: 'http://13.233.86.6/' }));
 app.use(cookieparser())
 app.use(bodyparser.urlencoded({ extended: false }))
 app.use(bodyparser.json());
