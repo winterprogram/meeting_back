@@ -8,9 +8,9 @@ const validateInput = require('../lib/paramsValidationLib')
 const check = require('../lib/checkLib')
 const token = require('../lib/tokenLib')
 const au = require('../models/AuthModel')
-const AuthModel = mongoose.model('Auth')
+const auth = mongoose.model('Auth')
 const userdd = require('../models/UserModel')
-const UserModel = mongoose.model('User')
+const userm = mongoose.model('User')
 const emailSend = require('../lib/emailSend')
 
 // signup for normal user
@@ -41,47 +41,54 @@ let signUpFunction = (req, res) => {
     // creating new user
     let createUser = () => {
         return new Promise((resolve, reject) => {
-            UserModel.findOne({ email: req.body.email }).exec((err, resultdata) => {
+            userm.find({ email: req.body.email }).exec((err, resultdata) => {
                 if (err) {
                     logger.error('Field Missing During User Creation', 'createUser() failed', 10)
                     let apiResponse = response.generate(true, 'Failed To Create User', 500, null)
                     reject(apiResponse)
                 } else if (check.isEmpty(resultdata)) {
+                    let regex = /^[a-zA-Z]+\d+/;
                     console.log(req.body)
-                    let userid = randomize('aA0', 6)
-                    let newuser = new UserModel({
-                        userId: userid,
-                        firstName: req.body.firstName,
-                        lastName: req.body.lastName || '',
-                        email: req.body.email.toLowerCase(),
-                        isAdmin: req.body.isAdmin,
-                        userName:req.body.userName,
-                        mobileNumber: req.body.mobileNumber,
-                        password: passwordLib.hashpassword(req.body.password),
-                        countryName: req.body.countryName,
-                        countryCode: req.body.countryCode,
-                        createdOn: time.now()
-                    })
-                    newuser.save((err, newuser) => {
-                        if (err) {
-                            logger.error(err.message, 'createUser stage-1', 10)
-                            let apiResponse = response.generate(true, 'Failed to create new user something went wrong', 500, null)
-                            reject(apiResponse)
-                        } else if (check.isEmpty(newuser)) {
-                            logger.error(err.message, 'createUser() stage-2 blank data received', 10)
-                            let apiResponse = response.generate(true, 'Failed to create new user something went wrong', 500, null)
-                            reject(apiResponse)
-                        }
-                        else {
-                            logger.info('new user created successfully', 'createUser() success')
-                            let newUserObj = newuser.toObject();
-                            resolve(newUserObj)
-                            emailSend.emailSend(newuser.email, 'Welcome To the Meeting application')
-                        }
-                    })
+                    if ((req.body.password).match(regex) && ((req.body.password).length >= 6)) {
+                        let userid = randomize('aA0', 6)
+                        let newuser = new userm({
+                            userId: userid,
+                            firstName: req.body.firstName,
+                            lastName: req.body.lastName || '',
+                            email: req.body.email.toLowerCase(),
+                            isAdmin: req.body.isAdmin,
+                            userName: req.body.userName,
+                            mobileNumber: req.body.mobileNumber,
+                            password: passwordLib.hashpassword(req.body.password),
+                            countryName: req.body.countryName,
+                            countryCode: req.body.countryCode,
+                            createdOn: time.now()
+                        })
+                        newuser.save((err, newuser) => {
+                            if (err) {
+                                logger.error(err.message, 'createUser stage-1', 10)
+                                let apiResponse = response.generate(true, 'Failed to create new user something went wrong', 500, null)
+                                reject(apiResponse)
+                            } else if (check.isEmpty(newuser)) {
+                                logger.error(err.message, 'createUser() stage-2 blank data received', 10)
+                                let apiResponse = response.generate(true, 'Failed to create new user something went wrong', 500, null)
+                                reject(apiResponse)
+                            }
+                            else {
+                                logger.info('new user created successfully', 'createUser() success')
+                                let newUserObj = newuser.toObject();
+                                resolve(newUserObj)
+                                emailSend.emailSend(newuser.email, 'Welcome To the Meeting application')
+                            }
+                        })
+                    } else {
+                        logger.error('entered password not in correct format', 'userController: createUser', 10)
+                        let apiResponse = response.generate(true, 'password is not in correct format', 503, null)
+                        reject(apiResponse)
+                    }
                 } else {
                     logger.error('User\'s account is present, please login', 'userController: createUser', 10)
-                    let apiResponse = response.generate(true, 'User\'s account is present, please login', 403, null)
+                    let apiResponse = response.generate(true, 'Email id or mobile no. is present, please login', 403, null)
                     reject(apiResponse)
                 }
             })
@@ -107,7 +114,7 @@ let loginFunction = (req, res) => {
     let findUser = () => {
         return new Promise((resolve, reject) => {
             if (req.body.email) {
-                UserModel.findOne({
+                userm.find({
                     email: req.body.email
                 }, ((err, userDetails) => {
                     if (err) {
@@ -137,7 +144,7 @@ let loginFunction = (req, res) => {
         return new Promise((resolve, reject) => {
             passwordLib.comparePassword(req.body.password, resultdata.password, (err, isMatch) => {
                 if (err) {
-                   logger.error('error while validating password','validatePassword()',10)
+                    logger.error('error while validating password', 'validatePassword()', 10)
                     logger.error(err.message, 'userController: validatePassword()', 10)
                     let apiResponse = response.generate(true, 'Login Failed', 500, null)
                     reject(apiResponse)
@@ -163,7 +170,7 @@ let loginFunction = (req, res) => {
         return new Promise((resolve, reject) => {
             token.generateToken(userDetails, (err, tokenDetails) => {
                 if (err) {
-                   logger.error('error while generating token','generateToken()',5)
+                    logger.error('error while generating token', 'generateToken()', 5)
                     let apiResponse = response.generate(true, 'Failed To Generate Token', 500, null)
                     reject(apiResponse)
                 } else {
@@ -177,7 +184,7 @@ let loginFunction = (req, res) => {
     let saveToken = (tokenDetails) => {
         console.log("save token");
         return new Promise((resolve, reject) => {
-            AuthModel.findOne({
+            auth.find({
                 userId: tokenDetails.userId
             }, (err, retrievedTokenDetails) => {
                 if (err) {
@@ -185,7 +192,7 @@ let loginFunction = (req, res) => {
                     let apiResponse = response.generate(true, 'Failed To Generate Token', 500, null)
                     reject(apiResponse)
                 } else if (check.isEmpty(retrievedTokenDetails)) {
-                    let newAuthToken = new AuthModel({
+                    let newAuthToken = new auth({
                         userId: tokenDetails.userId,
                         authToken: tokenDetails.token,
                         tokenSecret: tokenDetails.tokenSecret,
@@ -193,7 +200,7 @@ let loginFunction = (req, res) => {
                     })
                     newAuthToken.save((err, newTokenDetails) => {
                         if (err) {
-                            logger.error('Failed To Generate authToken','newAuthToken()',5)
+                            logger.error('Failed To Generate authToken', 'newAuthToken()', 5)
                             let apiResponse = response.generate(true, 'Failed To Generate Token', 500, null)
                             reject(apiResponse)
                         } else {
@@ -210,7 +217,7 @@ let loginFunction = (req, res) => {
                     retrievedTokenDetails.tokenGenerationTime = time.now()
                     retrievedTokenDetails.save((err, newTokenDetails) => {
                         if (err) {
-                            logger.error('Failed To Generate authToken -2 ','newAuthToken()',5)
+                            logger.error('Failed To Generate authToken -2 ', 'newAuthToken()', 5)
                             let apiResponse = response.generate(true, 'Failed To Generate Token', 500, null)
                             reject(apiResponse)
                         } else {
@@ -244,7 +251,7 @@ let loginFunction = (req, res) => {
 }
 
 let logout = (req, res) => {
-    AuthModel.findOneAndRemove({
+    auth.deleteOne({
         userId: req.params.userId
     }, (err, result) => {
         if (err) {
@@ -273,7 +280,7 @@ let forgotPassword = (req, res) => {
     }
     let sendResetPasswordLink = () => {
         return new Promise((resolve, reject) => {
-            UserModel.findOne({
+            userm.find({
                 email: req.body.email
             }, (err, result) => {
                 if (err) {
@@ -301,70 +308,9 @@ let forgotPassword = (req, res) => {
         })
 }
 
-let resetPassword = (req, res) => {
-    let findUser = () => {
-        return new Promise((resolve, reject) => {
-            if (req.body.userId) {
-                UserModel.findOne({
-                    userId: req.body.userId
-                }, (err, userDetails) => {
-                    if (err) {
-                        let apiResponse = response.generate(true, 'User not found', 404, null)
-                        reject(apiResponse)
-                    } else if (check.isEmpty(userDetails)) {
-                        console.log(userDetails)
-                        let apiResponse = response.generate(true, 'User deatils not found', 404, null)
-                        reject(apiResponse)
-                    } else {
-                        resolve(userDetails)
-                    }
-                })
-            } else {
-                let apiResponse = response.generate(true, 'UserID is missing', 400, null)
-                reject(apiResponse)
-            }
-        })
-    }
-    let updatePassword = (userDetails) => {
-        return new Promise((resolve, reject) => {
-            if (check.isEmpty(req.body.password)) {
-                let apiResponse = response.generate(true, 'password cannot be empty', 400, null)
-                reject(apiResponse)
-            } else {
-                UserModel.update({
-                    userId: req.body.userId
-                }, {
-                    password: passwordLib.hashpassword(req.body.password)
-                }, {
-                    multi: true
-                }, (err, result) => {
-                    if (err) {
-                        let apiResponse = response.generate(true, 'Failed to change password', 409, null)
-                        reject(apiResponse)
-                    } else if (check.isEmpty(result)) {
-                        let apiResponse = response.generate(true, 'User not found', 404, null)
-                        reject(apiResponse)
-                    } else {
-                        emailSend.emailSend(userDetails.email, `User with name as <b>${userDetails.firstName} ${userDetails.lastName} ,your password is successfully changed</b>`)
-                        let apiResponse = response.generate(false, 'password changed successfully', 200, 'password changed successfully')
-                        resolve(apiResponse)
-                    }
-                })
-            }
-        })
-    }
-    findUser(req, res)
-        .then(updatePassword)
-        .then((resolve) => {
-            res.status(200)
-            let apiResponse = response.generate(false, 'email successfully reset', 200, resolve)
-            console.log(apiResponse)
-            res.end(apiResponse)
-        }).catch((err) => res.send(err))
-}
 
 let getAllUsers = (req, res) => {
-    UserModel.find()
+    userm.find()
         .select(' -__v -_id')
         .lean()
         .exec((err, result) => {
@@ -386,7 +332,7 @@ let getAllUsers = (req, res) => {
 
 let deleteUser = (req, res) => {
 
-    UserModel.findOneAndRemove({ 'userId': req.params.userId }).exec((err, result) => {
+    userm.findAndRemove({ 'userId': req.params.userId }).exec((err, result) => {
         if (err) {
             console.log(err)
             logger.error(err.message, 'User Controller: deleteUser', 10)
@@ -406,7 +352,7 @@ let deleteUser = (req, res) => {
 }// end delete user
 
 let getSingleUser = (req, res) => {
-    UserModel.findOne({ 'userId': req.params.userId })
+    userm.find({ 'userId': req.params.userId })
         .select('-password -__v -_id')
         .lean()
         .exec((err, result) => {
@@ -430,7 +376,7 @@ let getSingleUser = (req, res) => {
 let editUser = (req, res) => {
 
     let options = req.body;
-    UserModel.update({ 'userId': req.params.userId }, options).exec((err, result) => {
+    userm.updateOne({ 'userId': req.params.userId }, options).exec((err, result) => {
         if (err) {
             console.log(err)
             logger.error(err.message, 'User Controller:editUser', 10)
@@ -454,7 +400,7 @@ module.exports = {
     loginFunction: loginFunction,
     logout: logout,
     forgotPassword: forgotPassword,
-    resetPassword: resetPassword,
+    // resetPassword: resetPassword,
     getAllUsers: getAllUsers,
     editUser: editUser,
     deleteUser: deleteUser,

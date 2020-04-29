@@ -124,7 +124,7 @@ let setRouter = (app) => {
      */
 
     // params: password
-    app.post(`/resetPassword`, userController.resetPassword)
+    // app.post(`/resetPassword`, userController.resetPassword)
     /**
      * @apiGroup users
      * @apiVersion 1.0.0
