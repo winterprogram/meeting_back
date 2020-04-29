@@ -25,6 +25,11 @@ app.all('*', function(req, res, next) {
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     next();
 });
+app.use((req, res, next) => {
+    const err = new Error('Not Found')
+    err.status = 405
+    next(err)
+})
 
 app.use(middlewareOnStart.appOnstart)
 // adding listerner
