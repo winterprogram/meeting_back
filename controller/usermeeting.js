@@ -216,10 +216,11 @@ let loginFunction = (req, res) => {
                         }
                     })
                 } else {
-                    retrievedTokenDetails.authToken = tokenDetails.token
-                    retrievedTokenDetails.tokenSecret = tokenDetails.tokenSecret
-                    retrievedTokenDetails.tokenGenerationTime = time.now()
-                    retrievedTokenDetails.save((err, newTokenDetails) => {
+                    console.log(retrievedTokenDetails)
+                    retrievedTokenDetails[0].authToken = tokenDetails.token
+                    retrievedTokenDetails[0].tokenSecret = tokenDetails.tokenSecret
+                    retrievedTokenDetails[0].tokenGenerationTime = time.now()
+                    retrievedTokenDetails[0].save((err, newTokenDetails) => {
                         if (err) {
                             logger.error('Failed To Generate authToken -2 ', 'newAuthToken()', 5)
                             let apiResponse = response.generate(true, 'Failed To Generate Token', 500, null)
