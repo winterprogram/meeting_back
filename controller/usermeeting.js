@@ -139,22 +139,26 @@ let loginFunction = (req, res) => {
             }
         })
     }
-    let validatePassword = (resultdata) => {
+    let validatePassword = (userDetails) => {
+        console.log(userDetails)
         console.log("validatePassword");
         return new Promise((resolve, reject) => {
-            passwordLib.comparePassword(req.body.password, resultdata.password, (err, isMatch) => {
+            passwordLib.comparePassword(req.body.password, userDetails[0].password, (err, isMatch) => {
+                console.log(isMatch)
                 if (err) {
                     logger.error('error while validating password', 'validatePassword()', 10)
                     logger.error(err.message, 'userController: validatePassword()', 10)
                     let apiResponse = response.generate(true, 'Login Failed', 500, null)
                     reject(apiResponse)
                 } else if (isMatch) {
-                    let retrievedUserDetailsObj = resultdata.toObject()
-                    delete retrievedUserDetailsObj.password
-                    delete retrievedUserDetailsObj._id
-                    delete retrievedUserDetailsObj.__v
-                    delete retrievedUserDetailsObj.createdOn
-                    delete retrievedUserDetailsObj.modifiedOn
+                    console.log(isMatch)
+                    // let retrievedUserDetailsObj = userDetails.toObject()
+                   let retrievedUserDetailsObj = userDetails[0]
+                     retrievedUserDetailsObj.password =undefined
+                     retrievedUserDetailsObj._id =undefined
+                     retrievedUserDetailsObj.__v =undefined
+                     retrievedUserDetailsObj.createdOn =undefined
+                     retrievedUserDetailsObj.modifiedOn =undefined
                     resolve(retrievedUserDetailsObj)
                 } else {
                     logger.info('Login Failed Due To Invalid Password', 'userController: validatePassword()', 10)
@@ -166,7 +170,7 @@ let loginFunction = (req, res) => {
     }
 
     let generateToken = (userDetails) => {
-        console.log("generate token");
+        console.log(userDetails);
         return new Promise((resolve, reject) => {
             token.generateToken(userDetails, (err, tokenDetails) => {
                 if (err) {
