@@ -26,6 +26,7 @@
     "randomatic": "^3.1.1",
     "redis": "^3.0.2",
     "request": "^2.88.2",
+    "shortid": "^2.2.15",
     "socket.io": "^2.3.0"
   }
 }

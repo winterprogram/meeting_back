@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
-const randomize = require('randomatic');
+const shortid = require('shortid');
 const time = require('./../lib/timeLib');
 const response = require('./../lib/responseLib')
 const emailSend = require('../lib/emailSend')
 const check = require('../lib/checkLib')
-const au = require('./../models/AuthModel')
+const auth = require('../models/AuthModel')
+const user = require('../models/UserModel')
+const meet = require('../models/MeetingModel')
 const AuthModel = mongoose.model('Auth')
-const userm = require('./../models/UserModel')
 const UserModel = mongoose.model('User')
-const meets = require('../models/MeetingModel')
 const MeetingModel = mongoose.model('Meeting')
 
 
@@ -29,7 +29,7 @@ let createMeeting = (req, res) => {
   let addThisMeeting = () => {
     return new Promise((resolve, reject) => {
       let newMeeting = new MeetingModel({
-        meetingId:randomize('Aa0',6),
+        meetingId: shortid.generate(),
         title: req.body.title,
         startDate: req.body.endDate,
         endDate: req.body.endDate,
@@ -58,7 +58,7 @@ let createMeeting = (req, res) => {
     .then(addThisMeeting)
     .then((resolve) => {
       let apiResponse = response.generate(false, 'meeting created', 200, resolve)
-      // console.log(apiResponse)
+      console.log(apiResponse)
       res.send(apiResponse)
     }).catch(err => res.send(err))
 }
@@ -66,7 +66,7 @@ let createMeeting = (req, res) => {
 
 
 let getSingleMeeting = (req, res) => {
-  MeetingModel.find({
+  MeetingModel.findOne({
       meetingId: req.params.meetingId
     })
     .select()
@@ -90,7 +90,7 @@ let getSingleMeeting = (req, res) => {
 let getAllMeetings = (req, res) => {
   let findUser = () => {
     return new Promise((resolve, reject) => {
-      UserModel.find({
+      UserModel.findOne({
         userId: req.params.userId
       }, (err, result) => {
         if (err) {
@@ -125,7 +125,7 @@ let getAllMeetings = (req, res) => {
             }
           })
       } else {
-        MeetingModel.find({
+        MeetingModel.findOne({
             createdFor: result.userId
           })
           .select('-__v -_id')
@@ -215,7 +215,7 @@ let getSelectedUserMeetings = (req, res) => {
 let updateMeeting = (req, res) => {
   let findMeetings = () => {
     return new Promise((resolve, reject) => {
-      MeetingModel.find({
+      MeetingModel.findOne({
         meetingId: req.params.meetingId
       }, (err, result) => {
         if (err) {
@@ -233,7 +233,7 @@ let updateMeeting = (req, res) => {
   let update = (result) => {
     return new Promise((resolve, reject) => {
       let options = req.body
-      MeetingModel.updateOne({
+      MeetingModel.update({
         meetingId: req.params.meetingId
       }, options, (err, result1) => {
         if (err) {
@@ -273,7 +273,7 @@ let getNormalMeetingsOnInit = (req, res) => {
   }
   let findUser = (req) => {
     return new Promise((resolve, reject) => {
-      UserModel.find({
+      UserModel.findOne({
         userId: req.params.userId
       }, (err, result) => {
         if (err) {
@@ -324,7 +324,7 @@ let getNormalMeetingsOnInit = (req, res) => {
 let deleteMeeting = (req, res) => {
   let findMeeting = () => {
     return new Promise((resolve, reject) => {
-      MeetingModel.find({
+      MeetingModel.findOne({
         meetingId: req.params.meetingId
       }, (err, result) => {
         if (err) {

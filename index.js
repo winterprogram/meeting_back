@@ -13,8 +13,8 @@ const bodyparser = require('body-parser')
 const logger = require('./lib/loger')
 
 var cors = require('cors');
-// app.use(cors({ origin: 'http://localhost:4200' }));
- app.use(cors({ origin: 'http://13.233.86.6' }));
+app.use(cors({ origin: 'http://localhost:4200' }));
+//  app.use(cors({ origin: 'http://13.233.86.6' }));
 app.use(cookieparser())
 app.use(bodyparser.urlencoded({ extended: false }))
 app.use(bodyparser.json());
@@ -38,17 +38,17 @@ function onError(error) {
     }
     switch (error.code) {
         case 'EACCES':
-          logger.error(error.code + ':elavated privileges required', 'serverOnErrorHandler', 10);
-          process.exit(1);
-          break;
+            logger.error(error.code + ':elavated privileges required', 'serverOnErrorHandler', 10);
+            process.exit(1);
+            break;
         case 'EADDRINUSE':
-          logger.error(error.code + ':port is already in use.', 'serverOnErrorHandler', 10);
-          process.exit(1);
-          break;
+            logger.error(error.code + ':port is already in use.', 'serverOnErrorHandler', 10);
+            process.exit(1);
+            break;
         default:
-          logger.error(error.code + ':some unknown error occured', 'serverOnErrorHandler', 10);
-          throw error;
-      }
+            logger.error(error.code + ':some unknown error occured', 'serverOnErrorHandler', 10);
+            throw error;
+    }
 }
 
 function onlisten() {
@@ -68,7 +68,7 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 const socketLib = require("./lib/socketlib");
-const socket=socketLib.setServer(server);
+const socket = socketLib.setServer(server);
 
 app.use(middlewareOnRoute.routes)
 let route = './routes'
@@ -76,12 +76,12 @@ fs.readdirSync(route).forEach(function (file) {
     (~file.indexOf('.js'))
     let router = require(route + '/' + file)
     router.setRouter(app)
-    
+
 })
 
 let model = './models'
 fs.readdirSync(model).forEach(function (file) {
-   if (~file.indexOf('.js')) require(model + '/' + file)
+    if (~file.indexOf('.js')) require(model + '/' + file)
 })
 
 
