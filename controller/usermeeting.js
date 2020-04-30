@@ -16,11 +16,11 @@ const eventemiter = new event.EventEmitter();
 // node mailer
 const nodemailer = require("nodemailer");
 const sgMail = require('@sendgrid/mail');
-let SENDGRID_API_KEY;
+// let SENDGRID_API_KEY;
 eventemiter.on('welcomemail', (email ,content) => {
 
     // const sgMail = require('@sendgrid/mail');
-     SENDGRID_API_KEY = `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`
+    //  SENDGRID_API_KEY = `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`
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
       to: email,
