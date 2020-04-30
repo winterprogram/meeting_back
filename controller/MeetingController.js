@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const randomize = require('randomatic');
 const time = require('./../lib/timeLib');
 const response = require('./../lib/responseLib')
+const emailSend = require('../lib/emailSend')
 const check = require('../lib/checkLib')
 const au = require('./../models/AuthModel')
 const AuthModel = mongoose.model('Auth')
@@ -9,47 +10,6 @@ const userm = require('./../models/UserModel')
 const UserModel = mongoose.model('User')
 const meets = require('../models/MeetingModel')
 const MeetingModel = mongoose.model('Meeting')
-const event = require('events')
-const eventemiter = new event.EventEmitter();
-// node mailer
-const nodemailer = require("nodemailer");
-
-eventemiter.on('welcomemail', (email ,content) => {
-    console.log(email ,content)
-    async function main() {
-
-        let testAccount = await nodemailer.createTestAccount();
-
-        let transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            auth: {
-                user: 'chakladar.sandeep.14et1151@gmail.com', //add user password
-                pass: 'examidea123'
-            }
-        });
-
-        // send mail with defined transport object
-        let info = await transporter.sendMail({
-            from: '"Fred Foo 👻" ', // sender address
-            to: email, // list of receivers
-            subject: "Hello ✔", // Subject line
-            text: "Hello world?", // plain text body
-            html: content // html body
-        });
-        console.log(`mail is sent successfullt to ${email}`)
-
-        console.log("Message sent: %s", info.messageId);
-        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-        // Preview only available when sending through an Ethereal account
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-    }
-
-    main().catch(console.error);
-})
 
 
 
@@ -88,9 +48,7 @@ let createMeeting = (req, res) => {
           reject(apiResponse)
         } else {
           let newMeetingObj = result.toObject()
-          setTimeout(() => {
-            eventemiter.emit('welcomemail', ((newMeetingObj.createdForEmail)),`<b>${newMeetingObj.createdByEmail} has set a meeting for you on ${newMeetingObj.startDate}.`)
-        }, 1000)
+          emailSend.emailSend(newMeetingObj.createdForEmail, `<b>${newMeetingObj.createdByEmail} has set a meeting for you on ${newMeetingObj.startDate} and will end on ${newMeetingObj.endDate}`)
           resolve(newMeetingObj)
         }
       })
@@ -286,10 +244,7 @@ let updateMeeting = (req, res) => {
           reject(apiResponse)
         } else {
           let meeting = result
-          setTimeout(() => {
-            eventemiter.emit('welcomemail', ((meeting.createdForEmail)),`Hi, your meeting has been rescheduled on ${meeting.startDate}.`)
-        }, 1000)
-         
+          emailSend.emailSend(meeting.createdForEmail, `Hey, your meeting has been rescheduled on ${meeting.startDate} and will be ending on ${meeting.endDate}`)
           resolve(result1)
         }
       })
@@ -396,10 +351,8 @@ let deleteMeeting = (req, res) => {
           let apiResponse = response.generate(true, 'failed to deleting meeting', 404, null)
           reject(apiResponse)
         } else {
-          setTimeout(() => {
-            eventemiter.emit('welcomemail', ((result.createdForEmail)),`<b>Meeting with title:${result.title} was deleted by ${result.createdBy}</b>`)
-            eventemiter.emit('welcomemail', ((result.createdByEmail)),`<b>Meeting with title:${result.title} was deleted by ${result.createdBy}/You</b>`)
-        }, 1000)
+          emailSend.emailSend(result.createdForEmail, `<b>Meeting with title:${result.title} was deleted by ${result.createdBy}</b>`)
+          emailSend.emailSend(result.createdByEmail, `<b>Meeting with title:${result.title} was deleted by ${result.createdBy}/You</b>`)
           resolve(result1)
         }
       })

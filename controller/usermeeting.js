@@ -11,48 +11,7 @@ const au = require('../models/AuthModel')
 const auth = mongoose.model('Auth')
 const userdd = require('../models/UserModel')
 const userm = mongoose.model('User')
-const event = require('events')
-const eventemiter = new event.EventEmitter();
-// node mailer
-const nodemailer = require("nodemailer");
-
-eventemiter.on('welcomemail', (email ,content) => {
-    
-    console.log(email ,content)
-    async function main() {
-
-        let testAccount = await nodemailer.createTestAccount();
-
-        let transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            auth: {
-                user: 'chakladar.sandeep.14et1151@gmail.com', //add user password
-                pass: 'examidea123'
-            }
-        });
-
-        // send mail with defined transport object
-        let info = await transporter.sendMail({
-            from: '"Fred Foo 👻" ', // sender address
-            to: email, // list of receivers
-            subject: "Hello ✔", // Subject line
-            text: "Hello world?", // plain text body
-            html: content // html body
-        });
-        console.log(`mail is sent successfullt to ${email}`)
-
-        console.log("Message sent: %s", info.messageId);
-        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-        // Preview only available when sending through an Ethereal account
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-    }
-
-    main().catch(console.error);
-})
+const emailSend = require('../lib/emailSend')
 
 // signup for normal user
 let signUpFunction = (req, res) => {
@@ -119,9 +78,7 @@ let signUpFunction = (req, res) => {
                                 logger.info('new user created successfully', 'createUser() success')
                                 let newUserObj = newuser.toObject();
                                 resolve(newUserObj)
-                                setTimeout(() => {
-                                    eventemiter.emit('welcomemail', ((newuser.email).toString()),`'Welcome To the Meeting application`)
-                                }, 1000)
+                                emailSend.emailSend(newuser.email, 'Welcome To the Meeting application')
                             }
                         })
                     } else {
@@ -196,12 +153,12 @@ let loginFunction = (req, res) => {
                 } else if (isMatch) {
                     console.log(isMatch)
                     // let retrievedUserDetailsObj = userDetails.toObject()
-                   let retrievedUserDetailsObj = userDetails[0]
+                   let retrievedUserDetailsObj = userDetails
                      retrievedUserDetailsObj.password =undefined
                      retrievedUserDetailsObj._id =undefined
                      retrievedUserDetailsObj.__v =undefined
-                     retrievedUserDetailsObj.createdOn =undefined
-                     retrievedUserDetailsObj.modifiedOn =undefined
+                     retrievedUserDetailsObj.createdOn = undefined
+                     retrievedUserDetailsObj.modifiedOn = undefined
                     resolve(retrievedUserDetailsObj)
                 } else {
                     logger.info('Login Failed Due To Invalid Password', 'userController: validatePassword()', 10)
@@ -337,10 +294,7 @@ let forgotPassword = (req, res) => {
                     let apiResponse = response.generate(true, 'No user found', 404, null)
                     reject(apiResponse)
                 } else {
-                    setTimeout(() => {
-                        eventemiter.emit('welcomemail', ((result.email)),`<a href='http://15.206.28.103/resetPassword/${result.userId}'>Click here to reset password</a>`)
-                    }, 1000)
-                   
+                    emailSend.emailSend(result.email, `<a href='http://localhost:3000/resetPassword/${result.userId}'>Click here to reset password</a>`)
                     let apiResponse = response.generate(false, 'Email sent to reset password', 200, null)
                     resolve(apiResponse)
                 }
@@ -450,6 +404,7 @@ module.exports = {
     loginFunction: loginFunction,
     logout: logout,
     forgotPassword: forgotPassword,
+    // resetPassword: resetPassword,
     getAllUsers: getAllUsers,
     editUser: editUser,
     deleteUser: deleteUser,
