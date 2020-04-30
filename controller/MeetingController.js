@@ -13,57 +13,42 @@ const event = require('events')
 const eventemiter = new event.EventEmitter();
 // node mailer
 const nodemailer = require("nodemailer");
-const sgMail = require('@sendgrid/mail');
-// let SENDGRID_API_KEY;
+
 eventemiter.on('welcomemail', (email ,content) => {
     console.log(email ,content)
+    async function main() {
 
-    // SENDGRID_API_KEY = `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`
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    const msg = {
-      to: email,
-      from: 'noreply@test.com',
-      subject: 'Meeting App email',
-      text: 'and easy to do anywhere, even with Node.js',
-      html: content,
-    };
-    sgMail.send(msg);
+        let testAccount = await nodemailer.createTestAccount();
 
-    console.log(email ,content)
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            auth: {
+                user: 'chakladar.sandeep.14et1151@gmail.com', //add user password
+                pass: 'examidea123'
+            }
+        });
 
-    // async function main() {
+        // send mail with defined transport object
+        let info = await transporter.sendMail({
+            from: '"Fred Foo 👻" ', // sender address
+            to: email, // list of receivers
+            subject: "Hello ✔", // Subject line
+            text: "Hello world?", // plain text body
+            html: content // html body
+        });
+        console.log(`mail is sent successfullt to ${email}`)
 
-    //     let testAccount = await nodemailer.createTestAccount();
+        console.log("Message sent: %s", info.messageId);
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
-    //     let transporter = nodemailer.createTransport({
-    //         host: 'smtp.gmail.com',
-    //         port: 587,
-    //         secure: false,
-    //         auth: {
-    //             user: 'chakladar.sandeep.14et1151@gmail.com', //add user password
-    //             pass: 'examidea123'
-    //         }
-    //     });
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    }
 
-    //     // send mail with defined transport object
-    //     let info = await transporter.sendMail({
-    //         from: '"Fred Foo 👻" ', // sender address
-    //         to: email, // list of receivers
-    //         subject: "Hello ✔", // Subject line
-    //         text: "Hello world?", // plain text body
-    //         html: content // html body
-    //     });
-    //     console.log(`mail is sent successfullt to ${email}`)
-
-    //     console.log("Message sent: %s", info.messageId);
-    //     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    //     // Preview only available when sending through an Ethereal account
-    //     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    //     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-    // }
-
-    // main().catch(console.error);
+    main().catch(console.error);
 })
 
 
