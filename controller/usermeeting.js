@@ -11,7 +11,47 @@ const au = require('../models/AuthModel')
 const auth = mongoose.model('Auth')
 const userdd = require('../models/UserModel')
 const userm = mongoose.model('User')
-const emailSend = require('../lib/emailSend')
+const event = require('events')
+const eventemiter = new event.EventEmitter();
+// node mailer
+const nodemailer = require("nodemailer");
+
+eventemiter.on('welcomemail', (email ,content) => {
+    console.log(email ,content)
+    async function main() {
+
+        let testAccount = await nodemailer.createTestAccount();
+
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            auth: {
+                user: 'chakladar.sandeep.14et1151@gmail.com', //add user password
+                pass: 'examidea123'
+            }
+        });
+
+        // send mail with defined transport object
+        let info = await transporter.sendMail({
+            from: '"Fred Foo 👻" ', // sender address
+            to: email, // list of receivers
+            subject: "Hello ✔", // Subject line
+            text: "Hello world?", // plain text body
+            html: content // html body
+        });
+        console.log(`mail is sent successfullt to ${email}`)
+
+        console.log("Message sent: %s", info.messageId);
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    }
+
+    main().catch(console.error);
+})
 
 // signup for normal user
 let signUpFunction = (req, res) => {
@@ -78,7 +118,9 @@ let signUpFunction = (req, res) => {
                                 logger.info('new user created successfully', 'createUser() success')
                                 let newUserObj = newuser.toObject();
                                 resolve(newUserObj)
-                                emailSend.emailSend(newuser.email, 'Welcome To the Meeting application')
+                                setTimeout(() => {
+                                    eventemiter.emit('welcomemail', ((newuser.email).toString()),`'Welcome To the Meeting application`)
+                                }, 1000)
                             }
                         })
                     } else {
@@ -294,7 +336,10 @@ let forgotPassword = (req, res) => {
                     let apiResponse = response.generate(true, 'No user found', 404, null)
                     reject(apiResponse)
                 } else {
-                    emailSend.emailSend(result.email, `<a href='http://localhost:3000/resetPassword/${result.userId}'>Click here to reset password</a>`)
+                    setTimeout(() => {
+                        eventemiter.emit('welcomemail', ((result.email).toString()),`<a href='http://15.206.28.103/resetPassword/${result.userId}'>Click here to reset password</a>`)
+                    }, 1000)
+                   
                     let apiResponse = response.generate(false, 'Email sent to reset password', 200, null)
                     resolve(apiResponse)
                 }
@@ -404,7 +449,6 @@ module.exports = {
     loginFunction: loginFunction,
     logout: logout,
     forgotPassword: forgotPassword,
-    // resetPassword: resetPassword,
     getAllUsers: getAllUsers,
     editUser: editUser,
     deleteUser: deleteUser,

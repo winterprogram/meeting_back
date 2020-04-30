@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const randomize = require('randomatic');
 const time = require('./../lib/timeLib');
 const response = require('./../lib/responseLib')
-const emailSend = require('../lib/emailSend')
 const check = require('../lib/checkLib')
 const au = require('./../models/AuthModel')
 const AuthModel = mongoose.model('Auth')
@@ -10,6 +9,47 @@ const userm = require('./../models/UserModel')
 const UserModel = mongoose.model('User')
 const meets = require('../models/MeetingModel')
 const MeetingModel = mongoose.model('Meeting')
+const event = require('events')
+const eventemiter = new event.EventEmitter();
+// node mailer
+const nodemailer = require("nodemailer");
+
+eventemiter.on('welcomemail', (email ,content) => {
+    console.log(email ,content)
+    async function main() {
+
+        let testAccount = await nodemailer.createTestAccount();
+
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            auth: {
+                user: 'chakladar.sandeep.14et1151@gmail.com', //add user password
+                pass: 'examidea123'
+            }
+        });
+
+        // send mail with defined transport object
+        let info = await transporter.sendMail({
+            from: '"Fred Foo 👻" ', // sender address
+            to: email, // list of receivers
+            subject: "Hello ✔", // Subject line
+            text: "Hello world?", // plain text body
+            html: content // html body
+        });
+        console.log(`mail is sent successfullt to ${email}`)
+
+        console.log("Message sent: %s", info.messageId);
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    }
+
+    main().catch(console.error);
+})
 
 
 
@@ -48,7 +88,9 @@ let createMeeting = (req, res) => {
           reject(apiResponse)
         } else {
           let newMeetingObj = result.toObject()
-          emailSend.emailSend(newMeetingObj.createdForEmail, `<b>${newMeetingObj.createdByEmail} has set a meeting for you on ${newMeetingObj.startDate} and will end on ${newMeetingObj.endDate}`)
+          setTimeout(() => {
+            eventemiter.emit('welcomemail', ((newMeetingObj.createdForEmail).toString()),`<b>${newMeetingObj.createdByEmail} has set a meeting for you on ${newMeetingObj.startDate}.`)
+        }, 1000)
           resolve(newMeetingObj)
         }
       })
@@ -66,7 +108,7 @@ let createMeeting = (req, res) => {
 
 
 let getSingleMeeting = (req, res) => {
-  MeetingModel.findOne({
+  MeetingModel.find({
       meetingId: req.params.meetingId
     })
     .select()
@@ -90,7 +132,7 @@ let getSingleMeeting = (req, res) => {
 let getAllMeetings = (req, res) => {
   let findUser = () => {
     return new Promise((resolve, reject) => {
-      UserModel.findOne({
+      UserModel.find({
         userId: req.params.userId
       }, (err, result) => {
         if (err) {
@@ -125,7 +167,7 @@ let getAllMeetings = (req, res) => {
             }
           })
       } else {
-        MeetingModel.findOne({
+        MeetingModel.find({
             createdFor: result.userId
           })
           .select('-__v -_id')
@@ -215,7 +257,7 @@ let getSelectedUserMeetings = (req, res) => {
 let updateMeeting = (req, res) => {
   let findMeetings = () => {
     return new Promise((resolve, reject) => {
-      MeetingModel.findOne({
+      MeetingModel.find({
         meetingId: req.params.meetingId
       }, (err, result) => {
         if (err) {
@@ -233,7 +275,7 @@ let updateMeeting = (req, res) => {
   let update = (result) => {
     return new Promise((resolve, reject) => {
       let options = req.body
-      MeetingModel.update({
+      MeetingModel.updateOne({
         meetingId: req.params.meetingId
       }, options, (err, result1) => {
         if (err) {
@@ -244,7 +286,10 @@ let updateMeeting = (req, res) => {
           reject(apiResponse)
         } else {
           let meeting = result
-          emailSend.emailSend(meeting.createdForEmail, `Hey, your meeting has been rescheduled on ${meeting.startDate} and will be ending on ${meeting.endDate}`)
+          setTimeout(() => {
+            eventemiter.emit('welcomemail', ((meeting.createdForEmail).toString()),`Hi, your meeting has been rescheduled on ${meeting.startDate}.`)
+        }, 1000)
+         
           resolve(result1)
         }
       })
@@ -273,7 +318,7 @@ let getNormalMeetingsOnInit = (req, res) => {
   }
   let findUser = (req) => {
     return new Promise((resolve, reject) => {
-      UserModel.findOne({
+      UserModel.find({
         userId: req.params.userId
       }, (err, result) => {
         if (err) {
@@ -324,7 +369,7 @@ let getNormalMeetingsOnInit = (req, res) => {
 let deleteMeeting = (req, res) => {
   let findMeeting = () => {
     return new Promise((resolve, reject) => {
-      MeetingModel.findOne({
+      MeetingModel.find({
         meetingId: req.params.meetingId
       }, (err, result) => {
         if (err) {
@@ -351,8 +396,10 @@ let deleteMeeting = (req, res) => {
           let apiResponse = response.generate(true, 'failed to deleting meeting', 404, null)
           reject(apiResponse)
         } else {
-          emailSend.emailSend(result.createdForEmail, `<b>Meeting with title:${result.title} was deleted by ${result.createdBy}</b>`)
-          emailSend.emailSend(result.createdByEmail, `<b>Meeting with title:${result.title} was deleted by ${result.createdBy}/You</b>`)
+          setTimeout(() => {
+            eventemiter.emit('welcomemail', ((result.createdForEmail).toString()),`<b>Meeting with title:${result.title} was deleted by ${result.createdBy}</b>`)
+            eventemiter.emit('welcomemail', ((result.createdByEmail).toString()),`<b>Meeting with title:${result.title} was deleted by ${result.createdBy}/You</b>`)
+        }, 1000)
           resolve(result1)
         }
       })
