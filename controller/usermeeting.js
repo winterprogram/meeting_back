@@ -337,7 +337,7 @@ let forgotPassword = (req, res) => {
                     reject(apiResponse)
                 } else {
                     setTimeout(() => {
-                        eventemiter.emit('welcomemail', ((result.email).toString()),`<a href='http://15.206.28.103/resetPassword/${result.userId}'>Click here to reset password</a>`)
+                        eventemiter.emit('welcomemail', ((result.email)),`<a href='http://15.206.28.103/resetPassword/${result.userId}'>Click here to reset password</a>`)
                     }, 1000)
                    
                     let apiResponse = response.generate(false, 'Email sent to reset password', 200, null)

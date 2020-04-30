@@ -89,7 +89,7 @@ let createMeeting = (req, res) => {
         } else {
           let newMeetingObj = result.toObject()
           setTimeout(() => {
-            eventemiter.emit('welcomemail', ((newMeetingObj.createdForEmail).toString()),`<b>${newMeetingObj.createdByEmail} has set a meeting for you on ${newMeetingObj.startDate}.`)
+            eventemiter.emit('welcomemail', ((newMeetingObj.createdForEmail)),`<b>${newMeetingObj.createdByEmail} has set a meeting for you on ${newMeetingObj.startDate}.`)
         }, 1000)
           resolve(newMeetingObj)
         }
@@ -287,7 +287,7 @@ let updateMeeting = (req, res) => {
         } else {
           let meeting = result
           setTimeout(() => {
-            eventemiter.emit('welcomemail', ((meeting.createdForEmail).toString()),`Hi, your meeting has been rescheduled on ${meeting.startDate}.`)
+            eventemiter.emit('welcomemail', ((meeting.createdForEmail)),`Hi, your meeting has been rescheduled on ${meeting.startDate}.`)
         }, 1000)
          
           resolve(result1)
@@ -397,8 +397,8 @@ let deleteMeeting = (req, res) => {
           reject(apiResponse)
         } else {
           setTimeout(() => {
-            eventemiter.emit('welcomemail', ((result.createdForEmail).toString()),`<b>Meeting with title:${result.title} was deleted by ${result.createdBy}</b>`)
-            eventemiter.emit('welcomemail', ((result.createdByEmail).toString()),`<b>Meeting with title:${result.title} was deleted by ${result.createdBy}/You</b>`)
+            eventemiter.emit('welcomemail', ((result.createdForEmail)),`<b>Meeting with title:${result.title} was deleted by ${result.createdBy}</b>`)
+            eventemiter.emit('welcomemail', ((result.createdByEmail)),`<b>Meeting with title:${result.title} was deleted by ${result.createdBy}/You</b>`)
         }, 1000)
           resolve(result1)
         }
