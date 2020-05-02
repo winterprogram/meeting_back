@@ -22,18 +22,34 @@ Note : You can skip this steps if you have Node ,npm and angularCLI installed on
  
 1) To start with this, install node and npm
 
-* [NodeJs](https://nodejs.org/en/) -  to install node
+* [NodeJs](https://nodejs.org/en/) -  to install node (node version >12.0.0)
 
 2) Install git 
 
 
 * [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) -  install Git
 
-3) Use npm to install Angular CLI - to install angular in your local machine
+### Step - 2
+
+Note : If you are on linux based OS then perform below commands:-
 
 ```
-npm install -g @angular/cli
+sudo npm install --unsafe-perm
 ```
+1) For windows to install all package dependencies :- 
 
+```
+npm install 
+```
+1) For linus/macOs to install all package dependencies :- 
+
+```
+sudo npm install 
+```
+### Step - 3 
+
+Rest api docs - * [index.html](/backend/apidoc/index.html)
+
+Event api docs - * [index.html](/backend/eventdoc/index.html)
 
 
