@@ -13,7 +13,7 @@ let isAuthorized = (req, res, next) => {
   
 
   if (req.params.authToken || req.query.authToken || req.body.authToken || req.header('authToken')) {
-    Auth.findOne({authToken: req.header('authToken') || req.params.authToken || req.body.authToken || req.query.authToken}, (err, authDetails) => {
+    Auth.find({authToken: req.header('authToken') || req.params.authToken || req.body.authToken || req.query.authToken}, (err, authDetails) => {
       if (err) {
         console.log(err)
         logger.error(err.message, 'AuthorizationMiddleware', 10)

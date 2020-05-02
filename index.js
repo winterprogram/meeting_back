@@ -13,8 +13,8 @@ const bodyparser = require('body-parser')
 const logger = require('./lib/loger')
 
 var cors = require('cors');
-// app.use(cors({ origin: 'http://localhost:4200' }));
-  app.use(cors({ origin: 'http://13.233.86.6' }));
+ app.use(cors({ origin: 'http://localhost:4200' }));
+//   app.use(cors({ origin: 'http://13.233.86.6' }));
 app.use(cookieparser())
 app.use(bodyparser.urlencoded({ extended: false }))
 app.use(bodyparser.json());
@@ -75,6 +75,7 @@ let route = './routes'
 fs.readdirSync(route).forEach(function (file) {
     (~file.indexOf('.js'))
     let router = require(route + '/' + file)
+    // console.log(router)
     router.setRouter(app)
 
 })

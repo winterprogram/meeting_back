@@ -1,0 +1,101 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Events</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand">Event Doc</a>
+        </nav>
+
+        <div class="d-flex justify-content-center">
+            <h1>Events documentation</h1>
+        </div>
+        <h3>Events to listen:-</h3>
+        <br>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <h6>
+                    Verify event
+                </h6>
+                <div>
+                    The event <b>("verifyUser")</b> listens on both the user and admin end to verify user and admin
+                    authentication. user and admin both will only be set as online user after verification of
+                    authentication token.
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h6>
+                    onlineUsersList
+                </h6>
+                <div>
+                    This event <b>("onlineUsersList")</b> has to be listened on the user's end to identify all available
+                    users that are currently online. All available users can be shown to the user based on which he can
+                    start chatting with a user. The output will be an object, object has key as userId and value as full
+                    name.
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h6>
+                    userId event
+                </h6>
+                <div>
+                    The event <b>("userId")</b> listens on user side . Whenever admin is creating any new
+                    meeting/updating/deleting any meeting scheduled at the same time user will get notification of the
+                    same and event is added to calender.
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h6>
+                    auth-error event
+                </h6>
+                <div>
+                    The event <b>("auth-error")</b> listens on both users and admin side when there is an error in
+                    authToken.
+                </div>
+            </li>
+        </ul>
+        <br>
+        <h3>Events to emit:-</h3>
+        <br>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <h6>
+                    set-user event
+                </h6>
+                <div>
+                    This event<b> ("set-user")</b> has to be emitted when normal user or admin get verify .
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h6>
+                    notify-updates events
+                </h6>
+                <div>
+                    The event <b>("notify-updates")</b> has to emit on every notification.
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h6>
+                    disconnect event
+                </h6>
+                <div>
+                    This event <b>("disconnect")</b> has to be emitted, when the user gets disconnected.
+                </div>
+            </li>
+            </li>
+        </ul>
+        <br>
+        <br>
+        <br>
+        
+    </div>
+
+</body>
+
+
+</html>

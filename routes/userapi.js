@@ -1,17 +1,17 @@
 const express = require('express');
-const router = express.Router();
-const userController = require('../controller/UserController');
+const router = express.Router()
+const usermanageapi = require('./../controller/usermanageapi');
 const appConfig = require('./../config/config')
-const auth = require('../middleware/auth')
+const auth = require('./../middleware/auth')
 
 let setRouter = (app) => {
 
 
     // params: firstName, lastName, isAdmin, mobileNumber, email, password, userName, countryName
-    app.post(`/signup`, userController.signUpFunction);
+    app.post(`/signup`, usermanageapi.signupforall);
     /**
      * @apiGroup users
-     * @apiVersion 1.0.0
+     * @apiVersion 0.0.1
      * @api {post} /signup api for new user signUp
      * 
      * @apiParam {string} firstName First Name of user. (body params)(required)
@@ -19,10 +19,10 @@ let setRouter = (app) => {
      * @apiParam {string} email Email of user. (body params)(required)
      * @apiParam {number} mobileNumber Mobile Number of user. (body params)(required)
      * @apiParam {string} countryName Country Name of user. (body params)(required)
-     * @apiParam {boolean} isAdmin boolean value either true/false of user. (body params)(required)
+     * @apiParam {boolean} isAdmin boolean value either true/false. (body params)(required)
      * @apiParam {string} password Password of user. (body params)(required)
      * 
-     * @apiSuccess {object} myResponse shows error status, message, http status code, result.
+     * @apiSuccess {object}  API Response shows error status, message, http status code, result.
      * 
      * @apiSuccessExample {object} Success-Response:
      * {
@@ -43,19 +43,26 @@ let setRouter = (app) => {
           "_id": "5ea0af48a3754b0770171c78"
       }
   }
+     * @apiErrorExample Error-Response:
+      { 
+       "error": true,
+       "message": "error while saving data",
+       "status": 500,
+       "data": null
+        }
     */
 
     // params: email, password
-    app.post(`/login`, userController.loginFunction);
+    app.post(`/login`, usermanageapi.loginforuser);
     /**
      * @apiGroup users
-     * @apiVersion 1.0.0
+     * @apiVersion 0.0.1
      * @api {post} /login api for user login.
      * 
      * @apiParam {string} email Email of the user. (body params)(required)
      * @apiParam {string} password Password of the user. (body params)(required)
      * 
-     * @apiSuccess {object} myResponse shows error status, message, http status code, result.
+     * @apiSuccess {object}  API Response shows error status, message, http status code, result.
      * 
      * @apiSuccessExample {object} Success-Response:
      * {
@@ -76,18 +83,25 @@ let setRouter = (app) => {
           }
       }
   }
+     * @apiErrorExample Error-Response:
+      { 
+       "error": true,
+       "message": "error login",
+       "status": 500,
+       "data": null
+        }
      */
 
-    app.post(`/logout/:userId`, userController.logout);
+    app.post(`/logout/:userId`, usermanageapi.logout);
     /**
      * @apiGroup users
-     * @apiVersion 1.0.0
+     * @apiVersion 0.0.1
      * @api {post} /logout/:userId api to log out
      * 
      * @apiParam {string} userId User ID of the user (body params)(required)
      * @apiParam {string} authToken Authorization Token of user (body params)(required) 
      * 
-     * @apiSuccess {object} myResponse shows error status, message, http status code, result.
+     * @apiSuccess {object}  API Response shows error status, message, http status code, result.
      * 
      * @apiSuccessExample {object} Success-Response:
      * {
@@ -96,18 +110,26 @@ let setRouter = (app) => {
       "status": 200,
       "data": null
   }
+
+     * @apiErrorExample Error-Response:
+      { 
+       "error": true,
+       "message": "error received blank data",
+       "status": 500,
+       "data": null
+        }
      */
 
     // params: email
-    app.post(`/forgotPassword`, userController.forgotPassword)
+    app.post(`/forgotPassword`, usermanageapi.forgotpassword)
     /**
      * @apiGroup users
-     * @apiVersion 1.0.0
+     * @apiVersion 0.0.1
      * @api {post} /forgotPassword api to send link for resetting the password
      * 
      * @apiParam {string} email Email of the user (body params)(required)
      * 
-     * @apiSuccess {object} myResponse shows error status, message, http status code, result.
+     * @apiSuccess {object}  API Response shows error status, message, http status code, result.
      * 
      * @apiSuccessExample {object} Success-Response:
      * {
@@ -121,52 +143,34 @@ let setRouter = (app) => {
           "data": "email sent"
       }
   }
+
+     * @apiErrorExample Error-Response:
+      { 
+       "error": true,
+       "message": "error mail didn't share",
+       "status": 500,
+       "data": null
+        }
      */
 
-    // params: password
-    // app.post(`/resetPassword`, userController.resetPassword)
+    app.get(`/view/all`, usermanageapi.fetchalluser)
     /**
      * @apiGroup users
-     * @apiVersion 1.0.0
-     * @api {post} /resetPassword api to reset the password 
-     * 
-     * @apiParam {string} password Password of the user (body params)(required)
-     * @apiParam {userId} userId User Id of the user (body params)(required)
-     * 
-     * @apiSuccess {object} myResponse shows error status, message, http status code, result.
-     * 
-     * @apiSuccessExample {object} Success-Response:
-     * { 
-      "error": false,
-      "message": "email successfully reset",
-      "status": 200,
-      "data": { 
-          "error": false,
-          "message": "password changed successfully",
-          "status": 200,
-          "data": "password changed successfully" 
-      } 
-  }
-     */
-
-    app.get(`/view/all`, userController.getAllUsers)
-    /**
-     * @apiGroup users
-     * @apiVersion 1.0.0
+     * @apiVersion 0.0.1
      * @api {get} /view/all api to get all users
      * 
      * @apiParam {string} authToken authToken of the user. (query params/body params/header)(required)
      * 
-     * @apiSuccess {object} myResponse shows error status, message, http status code, result.
+     * @apiSuccess {object}  API Response shows error status, message, http status code, result.
      * 
      * @apiSuccessExample {object} Success-Response:
      * {
       "error": false,
-      "message": "All User Details Found",
+      "message": "details fetched for all user",
       "status": 200,
       "data": [
           {
-	        "_id" : ObjectId("5ea1b652cde4724ac0e46700"),
+	        "_id" :"5ea1b652cde4724ac0e46700",
 	       "firstName" : "Sandeep",
 	       "lastName" : "chakladar",
 	       "userId" : "kj4UEw",
@@ -181,7 +185,7 @@ let setRouter = (app) => {
 	       "__v" : 0
          },
           {
-	       "_id" : ObjectId("5ea0af48a3754b0770171c78"),
+	       "_id" : "5ea0af48a3754b0770171c78",
 	       "firstName" : "sandeep",
 	       "lastName" : "c",
 	       "userId" : "Xk1Ll0",
@@ -194,28 +198,35 @@ let setRouter = (app) => {
 	       "__v" : 0
            }
       ]
-  }
+  }  
+    * @apiErrorExample Error-Response:
+      { 
+       "error": true,
+       "message": "No Users Found",
+       "status": 500,
+       "data": null
+        }
      */
 
-    app.post(`/:userId/delete`, auth.isAuthorized, userController.deleteUser);
+    app.post(`/:userId/delete`, auth.isAuthorized, usermanageapi.deleteuserdata);
     /**
      * @apiGroup users
-     * @apiVersion 1.0.0
-     * @api {get} view/all api to delete a user
+     * @apiVersion 0.0.1
+     * @api {get} /:userId/delete api to delete a user
      * 
      * @apiParam {string} authToken authToken of the user. (query params/body params/header)(required)
      * @apiParam {string} userId User Id of the user (body params)(required)
      * 
-     * @apiSuccess {object} myResponse shows error status, message, http status code, result.
+     * @apiSuccess {object}  API Response shows error status, message, http status code, result.
      * 
      * @apiSuccessExample {object} Success-Response:
      * {
       "error": false,
-      "message": "Deleted the user successfully",
+      "message": "user deleted successfully",
       "status": 200,
       "data": [
            {
-	       "_id" : ObjectId("5ea0af48a3754b0770171c78"),
+	       "_id" : "5ea0af48a3754b0770171c78",
 	       "firstName" : "sandeep",
 	       "lastName" : "c",
 	       "userId" : "Xk1Ll0",
@@ -229,10 +240,19 @@ let setRouter = (app) => {
            }
       ]
   }
+
+    * @apiErrorExample Error-Response:
+      { 
+       "error": true,
+       "message": "user not found",
+       "status": 500,
+       "data": null
+        }
      */
-    app.get('/view/:userId', auth.isAuthorized, userController.getSingleUser);
+    app.get('/view/:userId', auth.isAuthorized, usermanageapi.singleuserdata);
 
     /**
+     *  @apiGroup users
 	 * @api {get} /view/:userId Get a single user
 	 * @apiVersion 0.0.1
 	 * @apiGroup read
@@ -243,10 +263,10 @@ let setRouter = (app) => {
 	 *  @apiSuccessExample {json} Success-Response:
 	 *  {
 	    "error": false,
-	    "message": "User Details Found",
+	    "message": "user found",
 	    "status": 200,
 	    "data":  {
-	        "_id" : ObjectId("5ea1b652cde4724ac0e46700"),
+	        "_id" : "5ea1b652cde4724ac0e46700",
 	       "firstName" : "Sandeep",
 	       "lastName" : "chakladar",
 	       "userId" : "kj4UEw",
@@ -267,15 +287,16 @@ let setRouter = (app) => {
 	 *
 	 * {
 	    "error": true,
-	    "message": "No User Found",
+	    "message": "error no user found",
 	    "status": 404,
 	    "data": null
 	   }
 	 */
 
-    app.put('/:userId/edit', userController.editUser);
+    app.put('/:userId/edit', usermanageapi.edituserdata);
 
     /**
+     *  @apiGroup users
 	 * @api {put} /:userId/edit Edit user by userId
 	 * @apiVersion 0.0.1
 	 * @apiGroup edit
@@ -287,14 +308,23 @@ let setRouter = (app) => {
 	 *  @apiSuccessExample {json} Success-Response:
 	 *  {
 	    "error": false,
-        "message": "User details edited",
+        "message": "user data edited successfully",
         "status": 200,
         "data": {
                     "n": 1,
                     "nModified": 1,
                     "ok": 1 
                 }
-	    }
+        }
+        
+      @apiErrorExample {json} Error-Response:
+	 *
+	 * {
+	    "error": true,
+	    "message": "'error user not found",
+	    "status": 404,
+	    "data": null
+	   }
 	  
 	 */
 

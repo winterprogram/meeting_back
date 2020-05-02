@@ -22,9 +22,6 @@ const Meeting = new Schema({
     type: Date,
     default: ''
   },
-
-  
-
   createdBy: {
     type: String,
     default: ''
