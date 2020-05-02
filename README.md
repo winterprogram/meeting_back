@@ -48,8 +48,8 @@ sudo npm install
 ```
 ### Step - 3 
 
-Rest api docs -  [index.html](/backend/apidoc/index.html) :- /backend/apidoc/index.html
+Rest api docs -  [index.html](/meeting_back/apidoc/index.html) :- /meeting_back/apidoc/index.html
 
-Event api docs -  [index.html](/backend/eventdoc/index.html) :- /backend/eventdoc/index.html
+Event api docs -  [index.html](/meeting_back/eventdoc/index.html) :- /meeting_back/eventdoc/index.html
 
 
