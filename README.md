@@ -69,7 +69,7 @@ Run below command to start node sever in your machine locally
 ```
 node index.js
 ```
-##### 3.2.1 Nodemon  (optional)
+##### 3.3.1 Nodemon  (optional)
 
 [Nodemon](https://www.npmjs.com/package/nodemon) is a tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.
 
@@ -87,11 +87,11 @@ nodemon index.js
 
 ### Step - 4 
 
-Rest api docs -  [index.html](/meeting_back/apidoc/index.html) :- /meeting_back/apidoc/index.html
+Rest api docs -  [REST Api](/meeting_back/apidoc/index.html) :- /meeting_back/apidoc/index.html
 
-Event api docs -  [index.html](/meeting_back/eventdoc/index.html) :- /meeting_back/eventdoc/index.html
+Event api docs -  [Event docs](/meeting_back/eventdoc/index.html) :- /meeting_back/eventdoc/event.html
 
-Note - This links are not hosted. Please acces the docs by visiting the directory as mentioned above.
+Note - These links are not hosted. Please access the docs by visiting the directory as mentioned above.
 
 ## More about the application (backend)
 
@@ -99,9 +99,44 @@ Note - This links are not hosted. Please acces the docs by visiting the director
 
 2) Controllers :- This is main folder where the logics are implemented. In this folder there are two files usermanageapi.js and meetingapi.js
 
-  2.1) usermanageapi.js - This consist of logic related to user Signup, login, logout, forgotpassword, fetchalluser,           edituserdata, deleteuserdata and singleuserdata. 
+  2.1) usermanageapi.js - This consist of logic related to user Signup, login, logout, forgotpassword, fetchalluser,           edituserdata, deleteuserdata and singleuserdata. In other words all basic user authentication and authorization are covered.
 
+  2.2) meetingapi.js - This coveres all meeting CRUD realated functions such as creat meeting, update meeting , get all meetings, get meetings by user and delete meetings. 
 
+  Note:- For api docs /meeting_back/apidoc/index.html
 
+3) lib - This folder consist of all custom libs that are used in this app.
+  
+  3.1) checkLib.js - This libs is used to check if the o/p is empty.
 
+  3.2) emailSend.js - This lib is used to send emails.
+  
+  3.3) loger.js - We use loger lib to create logs for each functions
 
+  3.4) paramsValidayionLib.js - This is use to valid email and password entered by user using regex.
+
+  3.5) passwordLib.js - We use this lib to encrypt the password entered by user before saving it in db, it is also used for validating the entered passowrd, if that matched with the password in the db. 
+
+  3.6) redisLib.js - It is used to get all online users in the single hash, to set user online and to remove user from online list when it's disconnected.
+
+  3.7) responseLib.js - It is used to structure the api response.
+
+  3.8) socketlib.js - It consist of socket connection using socket.io. It is used to emit events like verifyUser , onlineUsersList etc 
+
+  Note :- For event docs  /meeting_back/eventdoc/event.html
+
+  3.9) timeLib.js - It uses moment.js for time 
+
+  3.10) tokenLib.js - It uses JWT token, to generate token and verify claim.
+
+4) Middleware - Middleware functions are functions that have access to the request object (req), the response object (res), and the next function in the application’s request-response cycle.
+
+5) Models - This is constist of all db schema that are required. 
+
+6) routes - In this file we define all routes and method of the applications
+ 
+   Note :- Rest api docs -  [REST Api](/meeting_back/apidoc/index.html) :- /meeting_back/apidoc/index.html
+
+           Event api docs -  [Event docs](/meeting_back/eventdoc/index.html) :- /meeting_back/eventdoc/event.html
+
+           These links are not hosted. Please access the docs by visiting the directory as mentioned above.

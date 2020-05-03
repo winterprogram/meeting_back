@@ -177,7 +177,7 @@ let setRouter = (app) => {
 	       "mobileNumber" : 9167162014,
 	       "password" : "$2b$10$fvFzdvq99oCdFNpuaoQ0COUI9QpvuJp5OGRp8W0XKP3dDxPcPKqJu",
 	       "isAdmin" : true,
-	       "createdOn" : ISODate("2020-04-23T21:07:54.000+05:30"),
+	       "createdOn" : "2020-04-23T21:07:54.000+05:30",
 	       "email" : "chakladar.sandeep3@gmail.com",
 	       "userName" : "exam-admin",
 	       "countryName" : "IN",
@@ -192,7 +192,7 @@ let setRouter = (app) => {
 	       "mobileNumber" : 91671620190,
 	       "password" : "$2b$10$QXEh.M.qsaQnpwm1MbBryunNqRzQ2wiZoBZ0hn3seE6U8ZM2JeBr2",
 	       "isAdmin" : false,
-	       "createdOn" : ISODate("2020-04-23T02:25:36.000+05:30"),
+	       "createdOn" : "2020-04-23T02:25:36.000+05:30",
 	       "email" : "chakladar.sandeep4@gmail.com",
 	       "countryName" : "w",
 	       "__v" : 0
@@ -233,7 +233,7 @@ let setRouter = (app) => {
 	       "mobileNumber" : 91671620190,
 	       "password" : "$2b$10$QXEh.M.qsaQnpwm1MbBryunNqRzQ2wiZoBZ0hn3seE6U8ZM2JeBr2",
 	       "isAdmin" : false,
-	       "createdOn" : ISODate("2020-04-23T02:25:36.000+05:30"),
+	       "createdOn" : "2020-04-23T02:25:36.000+05:30",
 	       "email" : "chakladar.sandeep4@gmail.com",
 	       "countryName" : "w",
 	       "__v" : 0
@@ -255,7 +255,6 @@ let setRouter = (app) => {
      *  @apiGroup users
 	 * @api {get} /view/:userId Get a single user
 	 * @apiVersion 0.0.1
-	 * @apiGroup read
 	 *
 	 * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
 	 * @apiParam {String} userId The userId should be passed as the URL parameter
@@ -273,7 +272,7 @@ let setRouter = (app) => {
 	       "mobileNumber" : 9167162014,
 	       "password" : "$2b$10$fvFzdvq99oCdFNpuaoQ0COUI9QpvuJp5OGRp8W0XKP3dDxPcPKqJu",
 	       "isAdmin" : true,
-	       "createdOn" : ISODate("2020-04-23T21:07:54.000+05:30"),
+	       "createdOn" : "2020-04-23T21:07:54.000+05:30",
 	       "email" : "chakladar.sandeep3@gmail.com",
 	       "userName" : "exam-admin",
 	       "countryName" : "IN",
@@ -299,7 +298,6 @@ let setRouter = (app) => {
      *  @apiGroup users
 	 * @api {put} /:userId/edit Edit user by userId
 	 * @apiVersion 0.0.1
-	 * @apiGroup edit
 	 *
 	 * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
 	 * @apiParam {String} userId userId of the user passed as the URL parameter

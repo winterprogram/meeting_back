@@ -1,60 +1,5 @@
 [
   {
-    "group": "edit",
-    "type": "put",
-    "url": "/:userId/edit",
-    "title": "Edit user by userId",
-    "version": "0.0.1",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>userId of the user passed as the URL parameter</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "options",
-            "description": "<p>parameters passed for editing</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": " {\n\t    \"error\": false,\n        \"message\": \"user data edited successfully\",\n        \"status\": 200,\n        \"data\": {\n                    \"n\": 1,\n                    \"nModified\": 1,\n                    \"ok\": 1 \n                }\n        }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"'error user not found\",\n\t    \"status\": 404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "routes/UserRoutes.js",
-    "groupTitle": "edit",
-    "name": "PutUseridEdit"
-  },
-  {
     "group": "meeting",
     "version": "0.0.1",
     "type": "get",
@@ -109,7 +54,7 @@
         }
       ]
     },
-    "filename": "routes/MeetingRoutes.js",
+    "filename": "routes/meetingapi.js",
     "groupTitle": "meeting",
     "name": "GetAllmeetingsUserid"
   },
@@ -175,7 +120,7 @@
         }
       ]
     },
-    "filename": "routes/MeetingRoutes.js",
+    "filename": "routes/meetingapi.js",
     "groupTitle": "meeting",
     "name": "GetFetchmeetingbyuser"
   },
@@ -234,7 +179,7 @@
         }
       ]
     },
-    "filename": "routes/MeetingRoutes.js",
+    "filename": "routes/meetingapi.js",
     "groupTitle": "meeting",
     "name": "GetGetmeetingbyuserUserid"
   },
@@ -293,7 +238,7 @@
         }
       ]
     },
-    "filename": "routes/MeetingRoutes.js",
+    "filename": "routes/meetingapi.js",
     "groupTitle": "meeting",
     "name": "GetSelectmeetingMeetingid"
   },
@@ -415,7 +360,7 @@
         }
       ]
     },
-    "filename": "routes/MeetingRoutes.js",
+    "filename": "routes/meetingapi.js",
     "groupTitle": "meeting",
     "name": "PostCreatemeeting"
   },
@@ -474,7 +419,7 @@
         }
       ]
     },
-    "filename": "routes/MeetingRoutes.js",
+    "filename": "routes/meetingapi.js",
     "groupTitle": "meeting",
     "name": "PostDeletemeetingMeetingid"
   },
@@ -568,57 +513,9 @@
         }
       ]
     },
-    "filename": "routes/MeetingRoutes.js",
+    "filename": "routes/meetingapi.js",
     "groupTitle": "meeting",
     "name": "PutUpdateusermeetingMeetingid"
-  },
-  {
-    "group": "read",
-    "type": "get",
-    "url": "/view/:userId",
-    "title": "Get a single user",
-    "version": "0.0.1",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "authToken",
-            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>The userId should be passed as the URL parameter</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": " {\n\t    \"error\": false,\n\t    \"message\": \"user found\",\n\t    \"status\": 200,\n\t    \"data\":  {\n\t        \"_id\" : \"5ea1b652cde4724ac0e46700\",\n\t       \"firstName\" : \"Sandeep\",\n\t       \"lastName\" : \"chakladar\",\n\t       \"userId\" : \"kj4UEw\",\n\t       \"mobileNumber\" : 9167162014,\n\t       \"password\" : \"$2b$10$fvFzdvq99oCdFNpuaoQ0COUI9QpvuJp5OGRp8W0XKP3dDxPcPKqJu\",\n\t       \"isAdmin\" : true,\n\t       \"createdOn\" : ISODate(\"2020-04-23T21:07:54.000+05:30\"),\n\t       \"email\" : \"chakladar.sandeep3@gmail.com\",\n\t       \"userName\" : \"exam-admin\",\n\t       \"countryName\" : \"IN\",\n\t       \"countryCode\" : \"91\",\n\t       \"__v\" : 0\n         }\n\t    \t}\n\t\t}\n\t}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"error no user found\",\n\t    \"status\": 404,\n\t    \"data\": null\n\t   }",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "routes/UserRoutes.js",
-    "groupTitle": "read",
-    "name": "GetViewUserid"
   },
   {
     "group": "users",
@@ -661,7 +558,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n      \"error\": false,\n      \"message\": \"user deleted successfully\",\n      \"status\": 200,\n      \"data\": [\n           {\n\t       \"_id\" : \"5ea0af48a3754b0770171c78\",\n\t       \"firstName\" : \"sandeep\",\n\t       \"lastName\" : \"c\",\n\t       \"userId\" : \"Xk1Ll0\",\n\t       \"mobileNumber\" : 91671620190,\n\t       \"password\" : \"$2b$10$QXEh.M.qsaQnpwm1MbBryunNqRzQ2wiZoBZ0hn3seE6U8ZM2JeBr2\",\n\t       \"isAdmin\" : false,\n\t       \"createdOn\" : ISODate(\"2020-04-23T02:25:36.000+05:30\"),\n\t       \"email\" : \"chakladar.sandeep4@gmail.com\",\n\t       \"countryName\" : \"w\",\n\t       \"__v\" : 0\n           }\n      ]\n  }",
+          "content": "{\n      \"error\": false,\n      \"message\": \"user deleted successfully\",\n      \"status\": 200,\n      \"data\": [\n           {\n\t       \"_id\" : \"5ea0af48a3754b0770171c78\",\n\t       \"firstName\" : \"sandeep\",\n\t       \"lastName\" : \"c\",\n\t       \"userId\" : \"Xk1Ll0\",\n\t       \"mobileNumber\" : 91671620190,\n\t       \"password\" : \"$2b$10$QXEh.M.qsaQnpwm1MbBryunNqRzQ2wiZoBZ0hn3seE6U8ZM2JeBr2\",\n\t       \"isAdmin\" : false,\n\t       \"createdOn\" : \"2020-04-23T02:25:36.000+05:30\",\n\t       \"email\" : \"chakladar.sandeep4@gmail.com\",\n\t       \"countryName\" : \"w\",\n\t       \"__v\" : 0\n           }\n      ]\n  }",
           "type": "object"
         }
       ]
@@ -675,7 +572,7 @@
         }
       ]
     },
-    "filename": "routes/UserRoutes.js",
+    "filename": "routes/userapi.js",
     "groupTitle": "users",
     "name": "GetUseridDelete"
   },
@@ -713,7 +610,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n      \"error\": false,\n      \"message\": \"details fetched for all user\",\n      \"status\": 200,\n      \"data\": [\n          {\n\t        \"_id\" :\"5ea1b652cde4724ac0e46700\",\n\t       \"firstName\" : \"Sandeep\",\n\t       \"lastName\" : \"chakladar\",\n\t       \"userId\" : \"kj4UEw\",\n\t       \"mobileNumber\" : 9167162014,\n\t       \"password\" : \"$2b$10$fvFzdvq99oCdFNpuaoQ0COUI9QpvuJp5OGRp8W0XKP3dDxPcPKqJu\",\n\t       \"isAdmin\" : true,\n\t       \"createdOn\" : ISODate(\"2020-04-23T21:07:54.000+05:30\"),\n\t       \"email\" : \"chakladar.sandeep3@gmail.com\",\n\t       \"userName\" : \"exam-admin\",\n\t       \"countryName\" : \"IN\",\n\t       \"countryCode\" : \"91\",\n\t       \"__v\" : 0\n         },\n          {\n\t       \"_id\" : \"5ea0af48a3754b0770171c78\",\n\t       \"firstName\" : \"sandeep\",\n\t       \"lastName\" : \"c\",\n\t       \"userId\" : \"Xk1Ll0\",\n\t       \"mobileNumber\" : 91671620190,\n\t       \"password\" : \"$2b$10$QXEh.M.qsaQnpwm1MbBryunNqRzQ2wiZoBZ0hn3seE6U8ZM2JeBr2\",\n\t       \"isAdmin\" : false,\n\t       \"createdOn\" : ISODate(\"2020-04-23T02:25:36.000+05:30\"),\n\t       \"email\" : \"chakladar.sandeep4@gmail.com\",\n\t       \"countryName\" : \"w\",\n\t       \"__v\" : 0\n           }\n      ]\n  }",
+          "content": "{\n      \"error\": false,\n      \"message\": \"details fetched for all user\",\n      \"status\": 200,\n      \"data\": [\n          {\n\t        \"_id\" :\"5ea1b652cde4724ac0e46700\",\n\t       \"firstName\" : \"Sandeep\",\n\t       \"lastName\" : \"chakladar\",\n\t       \"userId\" : \"kj4UEw\",\n\t       \"mobileNumber\" : 9167162014,\n\t       \"password\" : \"$2b$10$fvFzdvq99oCdFNpuaoQ0COUI9QpvuJp5OGRp8W0XKP3dDxPcPKqJu\",\n\t       \"isAdmin\" : true,\n\t       \"createdOn\" : \"2020-04-23T21:07:54.000+05:30\",\n\t       \"email\" : \"chakladar.sandeep3@gmail.com\",\n\t       \"userName\" : \"exam-admin\",\n\t       \"countryName\" : \"IN\",\n\t       \"countryCode\" : \"91\",\n\t       \"__v\" : 0\n         },\n          {\n\t       \"_id\" : \"5ea0af48a3754b0770171c78\",\n\t       \"firstName\" : \"sandeep\",\n\t       \"lastName\" : \"c\",\n\t       \"userId\" : \"Xk1Ll0\",\n\t       \"mobileNumber\" : 91671620190,\n\t       \"password\" : \"$2b$10$QXEh.M.qsaQnpwm1MbBryunNqRzQ2wiZoBZ0hn3seE6U8ZM2JeBr2\",\n\t       \"isAdmin\" : false,\n\t       \"createdOn\" : \"2020-04-23T02:25:36.000+05:30\",\n\t       \"email\" : \"chakladar.sandeep4@gmail.com\",\n\t       \"countryName\" : \"w\",\n\t       \"__v\" : 0\n           }\n      ]\n  }",
           "type": "object"
         }
       ]
@@ -727,9 +624,57 @@
         }
       ]
     },
-    "filename": "routes/UserRoutes.js",
+    "filename": "routes/userapi.js",
     "groupTitle": "users",
     "name": "GetViewAll"
+  },
+  {
+    "group": "users",
+    "type": "get",
+    "url": "/view/:userId",
+    "title": "Get a single user",
+    "version": "0.0.1",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>The userId should be passed as the URL parameter</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " {\n\t    \"error\": false,\n\t    \"message\": \"user found\",\n\t    \"status\": 200,\n\t    \"data\":  {\n\t        \"_id\" : \"5ea1b652cde4724ac0e46700\",\n\t       \"firstName\" : \"Sandeep\",\n\t       \"lastName\" : \"chakladar\",\n\t       \"userId\" : \"kj4UEw\",\n\t       \"mobileNumber\" : 9167162014,\n\t       \"password\" : \"$2b$10$fvFzdvq99oCdFNpuaoQ0COUI9QpvuJp5OGRp8W0XKP3dDxPcPKqJu\",\n\t       \"isAdmin\" : true,\n\t       \"createdOn\" : \"2020-04-23T21:07:54.000+05:30\",\n\t       \"email\" : \"chakladar.sandeep3@gmail.com\",\n\t       \"userName\" : \"exam-admin\",\n\t       \"countryName\" : \"IN\",\n\t       \"countryCode\" : \"91\",\n\t       \"__v\" : 0\n         }\n\t    \t}\n\t\t}\n\t}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"error no user found\",\n\t    \"status\": 404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "routes/userapi.js",
+    "groupTitle": "users",
+    "name": "GetViewUserid"
   },
   {
     "group": "users",
@@ -779,7 +724,7 @@
         }
       ]
     },
-    "filename": "routes/UserRoutes.js",
+    "filename": "routes/userapi.js",
     "groupTitle": "users",
     "name": "PostForgotpassword"
   },
@@ -838,7 +783,7 @@
         }
       ]
     },
-    "filename": "routes/UserRoutes.js",
+    "filename": "routes/userapi.js",
     "groupTitle": "users",
     "name": "PostLogin"
   },
@@ -897,7 +842,7 @@
         }
       ]
     },
-    "filename": "routes/UserRoutes.js",
+    "filename": "routes/userapi.js",
     "groupTitle": "users",
     "name": "PostLogoutUserid"
   },
@@ -991,8 +936,63 @@
         }
       ]
     },
-    "filename": "routes/UserRoutes.js",
+    "filename": "routes/userapi.js",
     "groupTitle": "users",
     "name": "PostSignup"
+  },
+  {
+    "group": "users",
+    "type": "put",
+    "url": "/:userId/edit",
+    "title": "Edit user by userId",
+    "version": "0.0.1",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>userId of the user passed as the URL parameter</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "options",
+            "description": "<p>parameters passed for editing</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " {\n\t    \"error\": false,\n        \"message\": \"user data edited successfully\",\n        \"status\": 200,\n        \"data\": {\n                    \"n\": 1,\n                    \"nModified\": 1,\n                    \"ok\": 1 \n                }\n        }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"'error user not found\",\n\t    \"status\": 404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "routes/userapi.js",
+    "groupTitle": "users",
+    "name": "PutUseridEdit"
   }
 ]
